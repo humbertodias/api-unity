@@ -15,7 +15,7 @@ public class AndroidService {
     File downloadDir = new File("download");
 
     @PostConstruct
-    void setup(){
+    void setup() {
         downloadDir.mkdirs();
     }
 
@@ -31,12 +31,12 @@ public class AndroidService {
         return HttpDownloadUtility.downloadFile(uri, packageId, downloadDir);
     }
 
-    public File file(String packageId){
+    public File file(String packageId) {
         var apkFileName = String.format("%s.apk", packageId);
         return new File(downloadDir, apkFileName);
     }
 
-    public File getFile(String packageId) throws IOException, InterruptedException {
+    public File getFile(String packageId) throws IOException {
         var apkFile = file(packageId);
         return apkFile.exists() ? apkFile : downloadFile(packageId);
     }
@@ -46,6 +46,7 @@ public class AndroidService {
             return apkFile.getManifestXml();
         }
     }
+
     public byte[] manifestMf(String packageId) throws IOException {
         try (var apkFile = new ApkFile(file(packageId))) {
             return apkFile.getFileData("META-INF/MANIFEST.MF");
@@ -54,17 +55,17 @@ public class AndroidService {
 
     public String unityVersion(String packageId) throws IOException {
         try (var apkFile = new ApkFile(file(packageId))) {
-            byte[] data = apkFile.getFileData("assets/bin/Data/Resources/unity_builtin_extra");
-            StringBuilder sb = new StringBuilder();
-            for(int i=20; data != null && data[i+1] != '\r' && i < 35; i++){
-                sb.append((char)data[i]);
+            var data = apkFile.getFileData("assets/bin/Data/Resources/unity_builtin_extra");
+            var sb = new StringBuilder();
+            for (int i = 20; data != null && data[i + 1] != '\r' && i < 35; i++) {
+                sb.append((char) data[i]);
             }
             return sb.toString();
         }
     }
 
     public boolean containsLib(String packageId, String fileName) throws IOException {
-        String [] libsPath = {
+        String[] libsPath = {
                 "lib/armeabi/" + fileName,
                 "lib/armeabi-v7a/" + fileName,
                 "lib/arm64-v8a/" + fileName,
@@ -74,7 +75,7 @@ public class AndroidService {
         };
         try (var apkFile = new ApkFile(file(packageId))) {
             for (var path : libsPath) {
-                byte[] data = apkFile.getFileData(path);
+                var data = apkFile.getFileData(path);
                 if (data.length > 0) return true;
             }
             return false;
@@ -82,12 +83,12 @@ public class AndroidService {
     }
 
     /**
-     *         armeabi: compiled code for all ARM based processors only
-     *         armeabi-v7a: compiled code for all ARMv7 and above based processors only
-     *         arm64-v8a: compiled code for all ARMv8 arm64 and above based processors only[9]
-     *         x86: compiled code for x86 processors only
-     *         x86_64: compiled code for x86 64 processors only
-     *         mips: compiled code for MIPS processors only
+     * armeabi: compiled code for all ARM based processors only
+     * armeabi-v7a: compiled code for all ARMv7 and above based processors only
+     * arm64-v8a: compiled code for all ARMv8 arm64 and above based processors only[9]
+     * x86: compiled code for x86 processors only
+     * x86_64: compiled code for x86 64 processors only
+     * mips: compiled code for MIPS processors only
      * @param packageId
      * @return
      * @throws IOException
