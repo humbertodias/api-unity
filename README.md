@@ -4,6 +4,7 @@ Build
     gradle clean microBundle
 
 Run
+
     java -jar build/libs/ROOT-microbundle.jar
 
 Then

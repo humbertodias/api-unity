@@ -64,7 +64,7 @@ public class AndroidService {
         }
     }
 
-    public boolean containsLib(String packageId, String libName) throws IOException {
+    public boolean containsLib(ApkFile apkFile, String libName) throws IOException {
         String[] archs = {
                 "armeabi",
                 "armeabi-v7a",
@@ -73,14 +73,17 @@ public class AndroidService {
                 "x86_64",
                 "mips"
         };
-        try (var apkFile = new ApkFile(file(packageId))) {
-            for (var arch : archs) {
-                var path = String.format("lib/%s/%s", arch, libName);
-                var data = apkFile.getFileData(path);
-                if (data != null && data.length > 0) return true;
-            }
-            return false;
+        for (var arch : archs) {
+            var path = String.format("lib/%s/%s", arch, libName);
+            if (containsFile(apkFile, path)) return true;
         }
+        return false;
+    }
+
+    boolean containsFile(ApkFile apkFile, String path) throws IOException {
+        var data = apkFile.getFileData(path);
+        if (data != null && data.length > 0) return true;
+        return false;
     }
 
     /**
@@ -96,11 +99,13 @@ public class AndroidService {
      * @throws IOException
      */
     public boolean unityMono(String packageId) throws IOException {
-        return containsLib(packageId, "libmono.so");
+        var apkFile = new ApkFile(file(packageId));
+        return containsLib(apkFile, "libmono.so") || containsFile(apkFile, "assets/bin/Data/Managed/etc/mono/config");
     }
 
     public boolean unityIlcpp(String packageId) throws IOException {
-        return containsLib(packageId, "libil2cpp.so");
+        var apkFile = new ApkFile(file(packageId));
+        return containsLib(apkFile, "libil2cpp.so");
     }
 
     public String meta(String packageId) throws IOException {
