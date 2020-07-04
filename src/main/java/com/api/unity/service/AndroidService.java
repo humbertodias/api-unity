@@ -64,19 +64,20 @@ public class AndroidService {
         }
     }
 
-    public boolean containsLib(String packageId, String fileName) throws IOException {
-        String[] libsPath = {
-                "lib/armeabi/" + fileName,
-                "lib/armeabi-v7a/" + fileName,
-                "lib/arm64-v8a/" + fileName,
-                "lib/x86/" + fileName,
-                "lib/x86_64/" + fileName,
-                "lib/mips/" + fileName
+    public boolean containsLib(String packageId, String libName) throws IOException {
+        String[] archs = {
+                "armeabi",
+                "armeabi-v7a",
+                "arm64-v8a",
+                "x86",
+                "x86_64",
+                "mips"
         };
         try (var apkFile = new ApkFile(file(packageId))) {
-            for (var path : libsPath) {
+            for (var arch : archs) {
+                var path = String.format("lib/%s/%s", arch, libName);
                 var data = apkFile.getFileData(path);
-                if (data.length > 0) return true;
+                if (data != null && data.length > 0) return true;
             }
             return false;
         }
@@ -89,6 +90,7 @@ public class AndroidService {
      * x86: compiled code for x86 processors only
      * x86_64: compiled code for x86 64 processors only
      * mips: compiled code for MIPS processors only
+     *
      * @param packageId
      * @return
      * @throws IOException
