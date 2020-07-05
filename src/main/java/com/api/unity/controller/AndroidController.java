@@ -21,6 +21,12 @@ public class AndroidController {
     AndroidService androidService;
 
     @GET
+    @Path("/")
+    public String[] files() {
+        return androidService.files();
+    }
+
+    @GET
     @Path("/url/{id}")
     public String url(@PathParam("id") String id) throws IOException {
         return androidService.getUrlApkDownload(id);
@@ -34,7 +40,7 @@ public class AndroidController {
         var stream = new FileStreamingOutput(file);
         return Response.ok(stream, MediaType.APPLICATION_OCTET_STREAM)
                 .header("content-length", file.length())
-                .header("content-disposition", String.format("attachment; filename='%s'",file.getName())).build();
+                .header("content-disposition", String.format("attachment; filename=%s",file.getName())).build();
     }
 
     @GET

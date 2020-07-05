@@ -29,6 +29,10 @@ public class AndroidService {
         downloadDir.mkdirs();
     }
 
+    public String [] files(){
+        return downloadDir.list();
+    }
+
     public String getUrlApkDownload(String packageId) throws IOException {
         var url = String.format(apkDownloaderUrl, packageId);
         var doc = Jsoup.connect(url).get();
