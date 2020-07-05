@@ -40,3 +40,7 @@ payaraMicro {
     commandLineOptions = [port: 2469]
     javaCommandLineOptions = [Dtest: 'test123', ea:true]
 }
+
+
+task stage(dependsOn: ['microBundle', 'clean'])
+build.mustRunAfter clean
