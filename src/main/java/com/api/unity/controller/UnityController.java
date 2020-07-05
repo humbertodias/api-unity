@@ -39,6 +39,4 @@ public class UnityController {
         return androidService.unityIlcpp(id);
     }
 
-
-
 }

@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class HttpDownloadUtility {
+public class DownloadHelper {
     private static final int BUFFER_SIZE = 4096;
 
     /**
@@ -29,11 +29,14 @@ public class HttpDownloadUtility {
             String contentType = httpConn.getContentType();
             int contentLength = httpConn.getContentLength();
 
+            String fileName = getFileName(disposition, fileURL);
+
             System.out.println("Content-Type = " + contentType);
             System.out.println("Content-Disposition = " + disposition);
             System.out.println("Content-Length = " + contentLength);
+            System.out.println("FileName = " + fileName);
 
-            String ext = "application/xapk-package-archive".equals(contentType) ? "xapk" : "apk";
+            String ext =  fileName.substring(fileName.lastIndexOf(".")+1);
             File file = new File(saveDir, packageId + "." + ext);
 
             // opens input stream from the HTTP connection
@@ -51,15 +54,21 @@ public class HttpDownloadUtility {
             httpConn.disconnect();
             System.out.println("File downloaded");
 
-            if(ext.equals("xapk")){
-                return UnzipUtility.extractApkFromXapk(file);
-            }
             return file;
         } else {
             throw new RuntimeException("No file to download. Server replied HTTP code: " + responseCode);
         }
     }
 
-
+    private static String getFileName(String disposition, String fileURL) {
+        if (disposition != null) {
+            // extracts file name from header field
+            int index = disposition.indexOf("filename=");
+            return disposition.substring(index + 10, disposition.length() - 1);
+        } else {
+            // extracts file name from URL
+            return fileURL.substring(fileURL.lastIndexOf("/") + 1, fileURL.length());
+        }
+    }
 
 }

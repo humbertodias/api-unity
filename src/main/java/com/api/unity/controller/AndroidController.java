@@ -1,6 +1,6 @@
 package com.api.unity.controller;
 
-import com.api.unity.helper.UnzipUtility;
+import com.api.unity.helper.UnzipHelper;
 import com.api.unity.service.AndroidService;
 
 import javax.inject.Inject;
@@ -22,20 +22,15 @@ public class AndroidController {
     AndroidService androidService;
 
     @GET
-    public String sayHello() {
-        return "Hello World";
-    }
-
-    @GET
     @Path("/url/{id}")
     public String url(@PathParam("id") String id) throws IOException {
-        return androidService.getApkPure(id);
+        return androidService.getUrlApkDownload(id);
     }
 
     @GET
-    @Path("/apk/{id}")
+    @Path("/download/{id}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response apk(@PathParam("id") String id) throws IOException, InterruptedException {
+    public Response apk(@PathParam("id") String id) throws IOException {
         var file = androidService.getFile(id);
         Response.ResponseBuilder response = Response.ok(file);
         response.header("Content-Disposition", "attachment;filename=" + file.getName());
@@ -75,7 +70,7 @@ public class AndroidController {
     @Produces(MediaType.TEXT_PLAIN)
     public boolean unzipXapk(@PathParam("id") String id) throws IOException {
         var xapk = new File(String.format("download/%s.xapk", id));
-        return UnzipUtility.extractApkFromXapk(xapk).exists();
+        return UnzipHelper.extractApkFromXapk(xapk).exists();
     }
 
 }

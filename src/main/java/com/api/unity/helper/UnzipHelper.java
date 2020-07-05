@@ -6,7 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.zip.ZipFile;
 
-public class UnzipUtility {
+public class UnzipHelper {
     /**
      * Size of the buffer to read/write data
      */
@@ -14,7 +14,7 @@ public class UnzipUtility {
 
     public static File extractApkFromXapk(File xapk) throws IOException {
         var apkFileName = xapk.getName().replace(".xapk", ".apk");
-        return extractFile(xapk, apkFileName);
+        return extractEntryToFile(xapk, apkFileName);
     }
 
     /**
@@ -24,7 +24,7 @@ public class UnzipUtility {
      * @param entryPath
      * @throws IOException
      */
-    private static File extractFile(File file, String entryPath) throws IOException {
+    private static File extractEntryToFile(File file, String entryPath) throws IOException {
 
         var zipIn = new ZipFile(file);
         var fileOut = new File(file.getParent(), entryPath);
