@@ -13,6 +13,7 @@ import javax.ws.rs.core.Application;
         version = "1.0.0"),
         servers = {
                 @Server(url = "http://localhost:8080",description = "8080"),
+                @Server(url = "http://api-unity.herokuapp.com",description = "Heroku"),
         }
 )
 @ApplicationPath("/api")
