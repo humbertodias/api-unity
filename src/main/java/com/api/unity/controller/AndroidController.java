@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.nio.file.Files;
 
 @Path("/android")
 @Singleton
@@ -27,9 +28,11 @@ public class AndroidController {
 
     @GET
     @Path("/download/{id}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response download(@PathParam("id") String id) throws IOException {
         var file = androidService.getFile(id);
-        Response.ResponseBuilder response = Response.ok(file, MediaType.APPLICATION_OCTET_STREAM);
+        byte[] content = Files.readAllBytes(file.toPath());
+        Response.ResponseBuilder response = Response.ok(content);
         response.header("Content-Disposition", "attachment;filename=" + file.getName());
         return response.build();
     }
