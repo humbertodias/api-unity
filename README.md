@@ -1,7 +1,7 @@
 
 Build
 
-    gradle clean microBundle
+    ./gradlew clean microBundle
 
 Run
 
