@@ -34,7 +34,7 @@ public class AndroidController {
         var stream = new FileStreamingOutput(file);
         return Response.ok(stream, MediaType.APPLICATION_OCTET_STREAM)
                 .header("content-length", file.length())
-                .header("content-disposition", "attachment; filename = "+file.getName()).build();
+                .header("content-disposition", String.format("attachment; filename='%s'",file.getName())).build();
     }
 
     @GET
