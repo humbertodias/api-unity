@@ -9,5 +9,5 @@ Run
 
 Then
 
-    http://localhost:8080/api/openapi-ui
+http://localhost:8080/api/openapi-ui
 

@@ -1,6 +1,5 @@
 package com.api.unity.controller;
 
-import com.api.unity.helper.UnzipHelper;
 import com.api.unity.service.AndroidService;
 
 import javax.inject.Inject;
@@ -11,7 +10,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.File;
 import java.io.IOException;
 
 @Path("/android")
@@ -29,10 +27,9 @@ public class AndroidController {
 
     @GET
     @Path("/download/{id}")
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response apk(@PathParam("id") String id) throws IOException {
+    public Response download(@PathParam("id") String id) throws IOException {
         var file = androidService.getFile(id);
-        Response.ResponseBuilder response = Response.ok(file);
+        Response.ResponseBuilder response = Response.ok(file, MediaType.APPLICATION_OCTET_STREAM);
         response.header("Content-Disposition", "attachment;filename=" + file.getName());
         return response.build();
     }
@@ -63,14 +60,6 @@ public class AndroidController {
     @Produces(MediaType.TEXT_PLAIN)
     public String meta(@PathParam("id") String id) throws IOException {
         return androidService.meta(id);
-    }
-
-    @GET
-    @Path("/unzip/{id}")
-    @Produces(MediaType.TEXT_PLAIN)
-    public boolean unzipXapk(@PathParam("id") String id) throws IOException {
-        var xapk = new File(String.format("download/%s.xapk", id));
-        return UnzipHelper.extractApkFromXapk(xapk).exists();
     }
 
 }

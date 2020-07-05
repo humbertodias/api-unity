@@ -39,7 +39,8 @@ public class AndroidService {
     public File downloadFile(String packageId) throws IOException {
         var uri = getUrlApkDownload(packageId);
         var file = DownloadHelper.downloadFile(uri, packageId, downloadDir);
-        return file.getName().endsWith(".xapk") ? UnzipHelper.extractApkFromXapk(file) : file;
+        if(file.getName().endsWith(".xapk")) UnzipHelper.extractApkFromXapk(file);
+        return file;
     }
 
     public File file(String packageId) {
