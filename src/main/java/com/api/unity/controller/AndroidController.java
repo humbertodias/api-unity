@@ -1,5 +1,6 @@
 package com.api.unity.controller;
 
+import com.api.unity.helper.FileStreamingOutput;
 import com.api.unity.service.AndroidService;
 
 import javax.inject.Inject;
@@ -11,7 +12,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.nio.file.Files;
 
 @Path("/android")
 @Singleton
@@ -31,10 +31,10 @@ public class AndroidController {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response download(@PathParam("id") String id) throws IOException {
         var file = androidService.getFile(id);
-        byte[] content = Files.readAllBytes(file.toPath());
-        Response.ResponseBuilder response = Response.ok(content);
-        response.header("Content-Disposition", "attachment;filename=" + file.getName());
-        return response.build();
+        var stream = new FileStreamingOutput(file);
+        return Response.ok(stream, MediaType.APPLICATION_OCTET_STREAM)
+                .header("content-length", file.length())
+                .header("content-disposition", "attachment; filename = "+file.getName()).build();
     }
 
     @GET
