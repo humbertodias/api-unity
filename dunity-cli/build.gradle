@@ -1,5 +1,6 @@
 plugins {
 	id 'java'
+	id "net.nemerosa.versioning" version "2.14.0"
 }
 
 repositories {
@@ -11,7 +12,6 @@ dependencies {
 	compile(project(':dunity-core'))
 
 	compile 'com.beust:jcommander:1.78'
-//	compile 'io.helidon.microprofile.weld:weld-se-core:2.0.1'
 
 	// CDI
 	// compile 'javax.enterprise:cdi-api:2.0.SP1'
@@ -21,7 +21,15 @@ dependencies {
 
 jar {
 	manifest {
-		attributes "Main-Class": "dunity.cli.MainCLI"
+		attributes(
+				"Main-Class"     : "dunity.cli.MainCLI",
+				'Built-By'       : System.properties['user.name'],
+				'Build-Timestamp': new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(new Date()),
+				'Build-Revision' : versioning.info.commit,
+				'Created-By'     : "Gradle ${gradle.gradleVersion}",
+				'Build-Jdk'      : "${System.properties['java.version']} (${System.properties['java.vendor']} ${System.properties['java.vm.version']})",
+				'Build-OS'       : "${System.properties['os.name']} ${System.properties['os.arch']} ${System.properties['os.version']}"
+		)
 	}
 
 	from {
