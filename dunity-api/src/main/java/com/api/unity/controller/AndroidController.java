@@ -2,7 +2,9 @@ package com.api.unity.controller;
 
 import com.api.unity.helper.FileStreamingOutput;
 import com.api.unity.service.AndroidService;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.ws.rs.GET;
@@ -18,7 +20,16 @@ import java.io.IOException;
 public class AndroidController {
 
     @Inject
+    @ConfigProperty(name = "apk.downloader.url")
+    String apkDownloaderUrl;
+
+    @Inject
     AndroidService androidService;
+
+    @PostConstruct
+    void setup() {
+        androidService.postConstruct(apkDownloaderUrl);
+    }
 
     @GET
     @Path("/")

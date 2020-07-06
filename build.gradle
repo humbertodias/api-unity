@@ -1,8 +1,5 @@
 plugins {
     id 'java'
-    id 'maven-publish'
-    id 'war'
-    id "fish.payara.micro-gradle-plugin" version "1.0.4"
 }
 
 repositories {
@@ -10,37 +7,10 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation 'org.eclipse.microprofile:microprofile:3.3'
-    implementation 'org.jsoup:jsoup:1.13.1'
-    implementation 'net.dongliu:apk-parser:2.6.10'
-    implementation 'org.microprofile-ext.openapi-ext:openapi-ui:1.1.4'
-}
-
 group = 'com.api.unity'
 version = '1.0-SNAPSHOT'
 sourceCompatibility = '11'
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from(components.java)
-        }
-    }
-}
-
-war {
-    archiveName 'ROOT.war'
-}
-
-payaraMicro {
-    deployWar = false
-    useUberJar = true
-    daemon = false
-    commandLineOptions = [port: 2469]
-    javaCommandLineOptions = [Dtest: 'test123', ea:true]
-}
-
-
-task stage(dependsOn: ['microBundle', 'clean'])
+// Heroku
+task stage(dependsOn: [':dunity-api:microBundle', 'clean'])
 build.mustRunAfter clean

@@ -8,6 +8,10 @@ import java.io.IOException;
 @Singleton
 public class UnityService {
 
+    public String version(String apkFile) throws IOException {
+        return version(new ApkFile(apkFile));
+    }
+
     public String version(ApkFile apkFile) throws IOException {
         var data = apkFile.getFileData("assets/bin/Data/Resources/unity_builtin_extra");
         var sb = new StringBuilder();
@@ -26,15 +30,8 @@ public class UnityService {
      * mips: compiled code for MIPS processors only
      */
     public boolean containsLib(ApkFile apkFile, String libName) throws IOException {
-        String[] archs = {
-                "armeabi",
-                "armeabi-v7a",
-                "arm64-v8a",
-                "x86",
-                "x86_64",
-                "mips"
-        };
-        for (var arch : archs) {
+        String[] arches = {"armeabi", "armeabi-v7a", "arm64-v8a", "x86", "x86_64", "mips"};
+        for (var arch : arches) {
             var path = String.format("lib/%s/%s", arch, libName);
             if (containsFile(apkFile, path)) return true;
         }

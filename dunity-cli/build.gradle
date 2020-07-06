@@ -1,0 +1,30 @@
+plugins {
+	id 'java'
+}
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+}
+
+dependencies {
+	compile(project(':dunity-core'))
+
+	compile 'com.beust:jcommander:1.78'
+//	compile 'io.helidon.microprofile.weld:weld-se-core:2.0.1'
+
+	// CDI
+	// compile 'javax.enterprise:cdi-api:2.0.SP1'
+	compile 'org.jboss.weld.se:weld-se-core:3.1.4.Final'
+
+}
+
+jar {
+	manifest {
+		attributes "Main-Class": "dunity.cli.MainCLI"
+	}
+
+	from {
+		configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+}

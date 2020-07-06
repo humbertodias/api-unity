@@ -1,0 +1,25 @@
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.jsoup:jsoup:1.13.1'
+    compile 'net.dongliu:apk-parser:2.6.10'
+    compile 'javax.inject:javax.inject:1'
+}
+
+group = 'com.api.unity'
+version = '1.0-SNAPSHOT'
+sourceCompatibility = '11'
+
+
+//jar {
+//    from {
+//        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+//    }
+//}

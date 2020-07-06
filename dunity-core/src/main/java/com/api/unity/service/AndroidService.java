@@ -3,10 +3,8 @@ package com.api.unity.service;
 import com.api.unity.helper.DownloadHelper;
 import com.api.unity.helper.UnzipHelper;
 import net.dongliu.apk.parser.ApkFile;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jsoup.Jsoup;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.io.File;
@@ -18,14 +16,12 @@ public class AndroidService {
     @Inject
     UnityService unityService;
 
-    @Inject
-    @ConfigProperty(name = "apk.downloader.url")
     String apkDownloaderUrl;
 
     File downloadDir = new File("download");
 
-    @PostConstruct
-    void setup() {
+    public void postConstruct(String apkDownloaderUrl){
+        this.apkDownloaderUrl = apkDownloaderUrl;
         downloadDir.mkdirs();
     }
 

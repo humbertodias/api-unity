@@ -1,1 +1,1 @@
-web: java -jar build/libs/ROOT-microbundle.jar --port $PORT --autoBindSsl --nocluster --nohostaware
+web: java -jar dunity-api/build/libs/ROOT-microbundle.jar --port $PORT --autoBindSsl --nocluster --nohostaware
