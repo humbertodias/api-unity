@@ -12,7 +12,8 @@ import javax.ws.rs.core.Application;
         title = "Api-Unity",
         version = "1.0.0"),
         servers = {
-                @Server(url = "http://api-unity.herokuapp.com",description = "Heroku"),
+                @Server(url = "https://api-unity.herokuapp.com",description = "Heroku - https"),
+                @Server(url = "http://api-unity.herokuapp.com",description = "Heroku - http"),
                 @Server(url = "http://localhost:8080",description = "8080"),
         }
 )

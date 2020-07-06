@@ -5,6 +5,7 @@ war:
 
 run:
 	java -jar build/libs/ROOT-microbundle.jar \
+	--autoBindSsl \
     --nocluster \
     --nohostaware
 
